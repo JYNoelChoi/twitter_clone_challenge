@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
+import 'package:twitter_clone/features/authentication/widgets/customize_exprience_screen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -43,13 +44,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   void onPressNext() {
-    print("onPressNext() called. _formData= $_formData");
+    // print("onPressNext() called. _formData= $_formData");
     if (_formKey.currentState != null) {
       // triggers validator
       if (_formKey.currentState!.validate()) {
         // triggers onSave calleback
         _formKey.currentState!.save();
-        print(_formData);
+        // print(_formData);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => CustomizeExprienceScreen()),
+        );
       }
     }
     setState(() {});
