@@ -22,7 +22,6 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: Text("Appbar")),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Sizes.size40),
