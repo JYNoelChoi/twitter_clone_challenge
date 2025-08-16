@@ -59,8 +59,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     // print("isNameValid() called. value = $value");
     if (value == null || value.isEmpty || value.length < 3) {
       // print("Name should be more than 3 letters.");
+      nameIcon = null;
       return "Name should be more than 3 letters.";
     }
+    nameIcon = FaIcon(
+      FontAwesomeIcons.solidCircleCheck,
+      size: Sizes.size24,
+      color: Colors.green,
+    );
     return null;
   }
 
@@ -220,6 +226,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: Column(
                   children: [
                     TextFormField(
+                      style: TextStyle(color: Colors.lightBlue),
                       decoration: InputDecoration(
                         suffixIcon: nameIcon,
                         hintText: "Name",
@@ -238,6 +245,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                     Gaps.v10,
                     TextFormField(
+                      style: TextStyle(color: Colors.lightBlue),
                       decoration: InputDecoration(
                         suffix: emailIcon,
                         hintText: "Phone number or email address",
@@ -256,6 +264,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                     Gaps.v10,
                     TextFormField(
+                      style: TextStyle(color: Colors.lightBlue),
                       onTap: () => _showDatePicker(context),
                       controller: _dateContoller,
                       decoration: InputDecoration(
