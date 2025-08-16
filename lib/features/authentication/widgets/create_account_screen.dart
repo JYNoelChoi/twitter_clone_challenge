@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
@@ -14,9 +15,25 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   DateTime initialDate = DateTime.now();
   DateTime minBirthDay = DateTime.now();
+  DateTime maxBirthDay = DateTime.now();
   final Map<String, String> _formData = {};
+  final TextEditingController _dateContoller = TextEditingController();
+
+  void _setTextFieldDate(DateTime date) {
+    minBirthDay = DateTime(
+      initialDate.year - 100,
+      initialDate.month,
+      initialDate.day,
+    );
+    maxBirthDay = DateTime(
+      initialDate.year - 12,
+      initialDate.month,
+      initialDate.day,
+    );
+  }
 
   void onPressNext() {
+    print("onPressNext() called. _formData= $_formData");
     if (_formKey.currentState != null) {
       // triggers validator
       if (_formKey.currentState!.validate()) {
@@ -25,11 +42,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         print(_formData);
       }
     }
-    // _formKey.currentState?.validate();
   }
 
   String? isNameValid(String? value) {
+    // print("isNameValid() called. value = $value");
     if (value == null || value.isEmpty || value.length < 3) {
+      // print("Name should be more than 3 letters.");
       return "Name should be more than 3 letters.";
     }
     return null;
@@ -74,6 +92,62 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       }
     }
     return null;
+  }
+
+  String? isBirthdayValid(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please provide a valid birthday.";
+    } else {
+      return null;
+    }
+  }
+
+  void _showDatePicker(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: 280,
+          color: Colors.white,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 200,
+                child: CupertinoDatePicker(
+                  mode: CupertinoDatePickerMode.date,
+                  initialDateTime: maxBirthDay,
+                  minimumDate: minBirthDay,
+                  maximumDate: maxBirthDay,
+                  onDateTimeChanged: (value) {
+                    _formData["birthday"] = value.toString();
+                  },
+                ),
+              ),
+              CupertinoButton(
+                onPressed: () => {
+                  Navigator.of(context).pop(),
+                  _dateContoller.text = initialDate.toString().split(" ").first,
+                },
+                child: Text(
+                  "Done",
+                  style: TextStyle(
+                    fontSize: Sizes.size24,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _setTextFieldDate(initialDate);
   }
 
   @override
@@ -146,6 +220,29 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       onSaved: (newValue) => {
                         if (newValue != null) _formData["email"] = newValue,
                       },
+                    ),
+                    Gaps.v10,
+                    GestureDetector(
+                      onTap: () => _showDatePicker(context),
+                      child: TextFormField(
+                        enabled: false,
+                        controller: _dateContoller,
+                        decoration: InputDecoration(
+                          hintText: "Date of birth",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: Sizes.size16,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                        ),
+                        validator: (value) => isBirthdayValid(value),
+                        onSaved: (newValue) => {
+                          if (newValue != null)
+                            _formData["birthday"] = newValue,
+                        },
+                      ),
                     ),
                   ],
                 ),
