@@ -124,7 +124,10 @@ class _CustomizeExprienceScreenState extends State<CustomizeExprienceScreen> {
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
         elevation: 0,
-        child: FormButton(disabled: !_customizeEnabled),
+        child: GestureDetector(
+          onTap: () => {Navigator.of(context).pop(_customizeEnabled)},
+          child: FormButton(disabled: !_customizeEnabled),
+        ),
       ),
     );
   }

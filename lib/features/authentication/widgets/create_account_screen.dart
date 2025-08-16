@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
+import 'package:twitter_clone/features/authentication/widgets/auth_button.dart';
 import 'package:twitter_clone/features/authentication/widgets/customize_exprience_screen.dart';
+import 'package:twitter_clone/features/authentication/widgets/form_button.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -22,13 +24,14 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   FaIcon? nameIcon;
   FaIcon? emailIcon;
   FaIcon? birthdayIcon;
-  bool showDisclaimer = false;
-
-  @override
-  void dispose() {
-    _dateContoller.dispose();
-    super.dispose();
-  }
+  bool _showDisclaimer = false;
+  bool _isCustomizeEnabled = false;
+  final TextStyle _textLinkStyle = TextStyle(
+    fontWeight: FontWeight.w600,
+    color: Colors.blue,
+  );
+  Widget? returnWidget;
+  BottomAppBar? bottomAppBar;
 
   void _setTextFieldDate(DateTime date) {
     minBirthDay = DateTime(
@@ -43,7 +46,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
   }
 
-  void onPressNext() {
+  void onPressNext() async {
     // print("onPressNext() called. _formData= $_formData");
     if (_formKey.currentState != null) {
       // triggers validator
@@ -51,10 +54,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         // triggers onSave calleback
         _formKey.currentState!.save();
         // print(_formData);
-        Navigator.push(
+        _isCustomizeEnabled = await Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => CustomizeExprienceScreen()),
         );
+
+        if (!mounted) return;
+        setState(() {});
       }
     }
     setState(() {});
@@ -165,7 +171,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               CupertinoButton(
                 onPressed: () => {
                   Navigator.of(context).pop(),
-                  showDisclaimer = false,
+                  _showDisclaimer = false,
                   setState(() {}),
                 },
                 child: Text(
@@ -182,7 +188,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         );
       },
     );
-    showDisclaimer = true;
+    _showDisclaimer = true;
     setState(() {});
   }
 
@@ -190,6 +196,77 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   void initState() {
     super.initState();
     _setTextFieldDate(initialDate);
+    returnWidget = Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text.rich(
+            TextSpan(
+              children: <TextSpan>[
+                TextSpan(text: "By signing up, you agree to our"),
+                TextSpan(text: "Terms, Privay Policy,", style: _textLinkStyle),
+                TextSpan(text: " and "),
+                TextSpan(text: "Cookit Use", style: _textLinkStyle),
+                TextSpan(
+                  text:
+                      ". Twitter may use your contact information, including your email address"
+                      " and phone number for purposes outlined in our Privacy Policy.",
+                ),
+                TextSpan(text: "Lean more", style: _textLinkStyle),
+                TextSpan(
+                  text:
+                      "Others will be able to find you by email or phone number, when "
+                      "provided, unless you choose otherwise.",
+                ),
+                TextSpan(text: "here", style: _textLinkStyle),
+              ],
+            ),
+          ),
+          Gaps.v24,
+          AuthButton(
+            text: "Sign up",
+            buttonColor: Colors.lightBlue,
+            textColor: Colors.white,
+          ),
+        ],
+      ),
+    );
+    bottomAppBar = BottomAppBar(
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: () => onPressNext(),
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                vertical: Sizes.size5,
+                horizontal: Sizes.size16,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.shade600,
+              ),
+              child: Text(
+                "Next",
+                style: TextStyle(
+                  color: Colors.grey.shade400,
+                  fontSize: Sizes.size16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          Gaps.h10,
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _dateContoller.dispose();
+    super.dispose();
   }
 
   @override
@@ -290,10 +367,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                     Gaps.v10,
                     AnimatedOpacity(
-                      opacity: showDisclaimer ? 1 : 0,
+                      opacity: _showDisclaimer ? 1 : 0,
                       duration: Duration(milliseconds: 300),
                       child: Text(
-                        "This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.",
+                        "This will not be shown publicly. Confirm your own age, even if"
+                        " this account is for a business, a pet, or something else.",
                         style: TextStyle(
                           fontSize: Sizes.size14,
                           color: Colors.grey.shade600,
@@ -303,40 +381,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   ],
                 ),
               ),
+              if (_isCustomizeEnabled) returnWidget!,
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            GestureDetector(
-              onTap: () => onPressNext(),
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: Sizes.size5,
-                  horizontal: Sizes.size16,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.grey.shade600,
-                ),
-                child: Text(
-                  "Next",
-                  style: TextStyle(
-                    color: Colors.grey.shade400,
-                    fontSize: Sizes.size16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            Gaps.h10,
-          ],
-        ),
-      ),
+      bottomNavigationBar: !_isCustomizeEnabled ? bottomAppBar : null,
     );
   }
 }
