@@ -18,6 +18,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   DateTime maxBirthDay = DateTime.now();
   final Map<String, String> _formData = {};
   final TextEditingController _dateContoller = TextEditingController();
+  FaIcon? nameIcon;
+  FaIcon? emailIcon;
+  FaIcon? birthdayIcon;
+  bool showDisclaimer = false;
+
+  @override
+  void dispose() {
+    _dateContoller.dispose();
+    super.dispose();
+  }
 
   void _setTextFieldDate(DateTime date) {
     minBirthDay = DateTime(
@@ -42,6 +52,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         print(_formData);
       }
     }
+    setState(() {});
   }
 
   String? isNameValid(String? value) {
@@ -58,6 +69,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
     );
     if (value == null || value.isEmpty || !regExp.hasMatch(value)) {
+      emailIcon = null;
       return "Please provide a valid email or phone number.";
     }
     return null;
@@ -79,8 +91,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     var emailValid = isEmailValid(value);
     var phoneNumberValid = isPhoneNumberValid(value);
     // print("isEmailOrPhoneNumberValid: value = $value");
-    if (value == null || value.isEmpty) return emailValid;
-
+    emailIcon = null;
+    if (value == null || value.isEmpty) {
+      return emailValid;
+    }
     // print("email valid = $emailValid");
     // print("phone number valid = $phoneNumberValid");
 
@@ -91,13 +105,26 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         return emailValid;
       }
     }
+
+    emailIcon = FaIcon(
+      FontAwesomeIcons.solidCircleCheck,
+      size: Sizes.size24,
+      color: Colors.green,
+    );
+
     return null;
   }
 
   String? isBirthdayValid(String? value) {
+    birthdayIcon = null;
     if (value == null || value.isEmpty) {
       return "Please provide a valid birthday.";
     } else {
+      birthdayIcon = FaIcon(
+        FontAwesomeIcons.solidCircleCheck,
+        size: Sizes.size24,
+        color: Colors.green,
+      );
       return null;
     }
   }
@@ -119,6 +146,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   minimumDate: minBirthDay,
                   maximumDate: maxBirthDay,
                   onDateTimeChanged: (value) {
+                    _dateContoller.text = value.toString().split(" ").first;
                     _formData["birthday"] = value.toString();
                   },
                 ),
@@ -126,7 +154,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               CupertinoButton(
                 onPressed: () => {
                   Navigator.of(context).pop(),
-                  _dateContoller.text = initialDate.toString().split(" ").first,
+                  showDisclaimer = false,
+                  setState(() {}),
                 },
                 child: Text(
                   "Done",
@@ -142,6 +171,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
         );
       },
     );
+    showDisclaimer = true;
+    setState(() {});
   }
 
   @override
@@ -190,6 +221,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   children: [
                     TextFormField(
                       decoration: InputDecoration(
+                        suffixIcon: nameIcon,
                         hintText: "Name",
                         hintStyle: TextStyle(
                           color: Colors.grey.shade600,
@@ -207,6 +239,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     Gaps.v10,
                     TextFormField(
                       decoration: InputDecoration(
+                        suffix: emailIcon,
                         hintText: "Phone number or email address",
                         hintStyle: TextStyle(
                           color: Colors.grey.shade600,
@@ -222,26 +255,35 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       },
                     ),
                     Gaps.v10,
-                    GestureDetector(
+                    TextFormField(
                       onTap: () => _showDatePicker(context),
-                      child: TextFormField(
-                        enabled: false,
-                        controller: _dateContoller,
-                        decoration: InputDecoration(
-                          hintText: "Date of birth",
-                          hintStyle: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: Sizes.size16,
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade400),
-                          ),
+                      controller: _dateContoller,
+                      decoration: InputDecoration(
+                        suffix: birthdayIcon,
+                        hintText: "Date of birth",
+                        hintStyle: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: Sizes.size16,
                         ),
-                        validator: (value) => isBirthdayValid(value),
-                        onSaved: (newValue) => {
-                          if (newValue != null)
-                            _formData["birthday"] = newValue,
-                        },
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                      ),
+                      validator: (value) => isBirthdayValid(value),
+                      onSaved: (newValue) => {
+                        if (newValue != null) _formData["birthday"] = newValue,
+                      },
+                    ),
+                    Gaps.v10,
+                    AnimatedOpacity(
+                      opacity: showDisclaimer ? 1 : 0,
+                      duration: Duration(milliseconds: 300),
+                      child: Text(
+                        "This will not be shown publicly. Confirm your own age, even if this account is for a business, a pet, or something else.",
+                        style: TextStyle(
+                          fontSize: Sizes.size14,
+                          color: Colors.grey.shade600,
+                        ),
                       ),
                     ),
                   ],
