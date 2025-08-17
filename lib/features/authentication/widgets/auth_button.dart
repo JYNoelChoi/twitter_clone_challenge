@@ -4,7 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 
-class AuthButton extends StatelessWidget {
+class AuthButton extends StatefulWidget {
   final String text;
   final FaIcon? icon;
   final Image? image;
@@ -13,9 +13,9 @@ class AuthButton extends StatelessWidget {
   final Color? buttonColor;
   final Color? textColor;
   final BorderRadius? borderRadius;
-  bool showLeader = false;
+  final bool showLeader;
 
-  AuthButton({
+  const AuthButton({
     super.key,
     required this.text,
     this.icon,
@@ -29,35 +29,45 @@ class AuthButton extends StatelessWidget {
   });
 
   @override
+  State<AuthButton> createState() => _AuthButtonState();
+}
+
+class _AuthButtonState extends State<AuthButton> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: widget.onPressed,
       child: FractionallySizedBox(
         widthFactor: 1,
         child: Container(
           padding: EdgeInsets.all(Sizes.size10),
           decoration: BoxDecoration(
-            color: buttonColor ?? Colors.white,
-            borderRadius: borderRadius ?? BorderRadius.circular(Sizes.size32),
+            color: widget.buttonColor ?? Colors.white,
+            borderRadius:
+                widget.borderRadius ?? BorderRadius.circular(Sizes.size32),
             border: Border.all(
-              color: borderColor ?? Colors.grey.shade300,
+              color: widget.borderColor ?? Colors.grey.shade300,
               width: Sizes.size1,
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(child: icon ?? ((image != null) ? image : null)),
+              Container(
+                child:
+                    widget.icon ??
+                    ((widget.image != null) ? widget.image : null),
+              ),
               Gaps.h16,
-              showLeader
+              widget.showLeader
                   ? CupertinoActivityIndicator(color: Colors.white)
                   : Text(
-                      text,
+                      widget.text,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: Sizes.size16,
                         fontWeight: FontWeight.w800,
-                        color: textColor ?? Colors.black87,
+                        color: widget.textColor ?? Colors.black87,
                       ),
                     ),
             ],
