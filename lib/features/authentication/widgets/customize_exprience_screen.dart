@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 import 'package:twitter_clone/features/authentication/widgets/form_button.dart';
+import 'package:twitter_clone/features/authentication/widgets/twitter_appbar.dart';
 
 class CustomizeExprienceScreen extends StatefulWidget {
   const CustomizeExprienceScreen({super.key});
@@ -24,32 +24,7 @@ class _CustomizeExprienceScreenState extends State<CustomizeExprienceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () => {Navigator.of(context).pop()},
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size16,
-              horizontal: Sizes.size16,
-            ),
-            child: FaIcon(
-              FontAwesomeIcons.arrowLeft,
-              color: Colors.black87,
-              size: Sizes.size20,
-            ),
-          ),
-        ),
-        automaticallyImplyLeading: false,
-
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        title: FaIcon(
-          FontAwesomeIcons.twitter,
-          color: Color(0xFF1DA1F2),
-          size: Sizes.size28,
-        ),
-      ),
+      appBar: const TwitterAppBar(),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: Sizes.size40),
