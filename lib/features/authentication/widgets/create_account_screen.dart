@@ -5,7 +5,6 @@ import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 import 'package:twitter_clone/features/authentication/widgets/auth_button.dart';
 import 'package:twitter_clone/features/authentication/widgets/customize_exprience_screen.dart';
-import 'package:twitter_clone/features/authentication/widgets/form_button.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
