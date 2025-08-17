@@ -5,6 +5,7 @@ import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 import 'package:twitter_clone/features/authentication/widgets/auth_button.dart';
 import 'package:twitter_clone/features/authentication/widgets/customize_exprience_screen.dart';
+import 'package:twitter_clone/features/confirmation/widgets/confirmation_screen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -63,6 +64,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       }
     }
     setState(() {});
+  }
+
+  void _onPressSignup() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmationScreen(formData: _formData),
+      ),
+    );
   }
 
   String? isNameValid(String? value) {
@@ -233,6 +243,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
             text: "Sign up",
             buttonColor: Colors.lightBlue,
             textColor: Colors.white,
+            onPressed: _onPressSignup,
           ),
         ],
       ),

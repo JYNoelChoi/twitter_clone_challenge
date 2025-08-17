@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:twitter_clone/constants/gaps.dart';
@@ -12,8 +13,9 @@ class AuthButton extends StatelessWidget {
   final Color? buttonColor;
   final Color? textColor;
   final BorderRadius? borderRadius;
+  bool showLeader = false;
 
-  const AuthButton({
+  AuthButton({
     super.key,
     required this.text,
     this.icon,
@@ -23,6 +25,7 @@ class AuthButton extends StatelessWidget {
     this.image,
     this.buttonColor,
     this.textColor,
+    this.showLeader = false,
   });
 
   @override
@@ -46,15 +49,17 @@ class AuthButton extends StatelessWidget {
             children: [
               Container(child: icon ?? ((image != null) ? image : null)),
               Gaps.h16,
-              Text(
-                text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  fontWeight: FontWeight.w800,
-                  color: textColor ?? Colors.black87,
-                ),
-              ),
+              showLeader
+                  ? CupertinoActivityIndicator(color: Colors.white)
+                  : Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: Sizes.size16,
+                        fontWeight: FontWeight.w800,
+                        color: textColor ?? Colors.black87,
+                      ),
+                    ),
             ],
           ),
         ),

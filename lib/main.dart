@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
+import 'package:twitter_clone/features/confirmation/widgets/confirmation_screen.dart';
 
 void main() {
-  runApp(const TwitterApp());
+  // runApp(const TwitterApp());
+  // TODO: for dev only
+  runApp(TwitterApp());
 }
 
 class TwitterApp extends StatelessWidget {
-  const TwitterApp({super.key});
+  TwitterApp({super.key});
+
+  // TODO: for dev only
+  final Map<String, String> formData = {
+    "email": "adsfdsa@dsafds.com",
+    "password": "asdfdasfadsfdsaf",
+    "birdthday": "2003-01-01",
+  };
 
   // This widget is the root of your application.
   @override
@@ -27,7 +37,9 @@ class TwitterApp extends StatelessWidget {
           ),
         ),
       ),
-      home: InitialScreen(),
+      // TODO: for dev only. To replace.
+      // home: InitialScreen(),
+      home: ConfirmationScreen(formData: formData),
     );
   }
 }
