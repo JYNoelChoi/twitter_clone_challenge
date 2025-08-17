@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants/sizes.dart';
-import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
+// TODO to reverse later
+// import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
 import 'package:twitter_clone/features/confirmation/widgets/confirmation_screen.dart';
 
 void main() {
