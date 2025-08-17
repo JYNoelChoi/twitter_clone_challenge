@@ -146,6 +146,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   void _showDatePicker(BuildContext context) {
+    if (_dateContoller.text.isEmpty) {
+      _dateContoller.text = maxBirthDay.toString().split(" ").first;
+    }
     showCupertinoModalPopup(
       context: context,
       builder: (context) {
@@ -189,6 +192,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     );
     _showDisclaimer = true;
     setState(() {});
+  }
+
+  void _onScaffoldTap() {
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -270,122 +277,127 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: TextButton(
-          onPressed: () => {Navigator.of(context).pop()},
-          child: Text(
-            "Cancel",
-            style: TextStyle(color: Colors.black, fontSize: Sizes.size16),
+    return GestureDetector(
+      onTap: _onScaffoldTap,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: TextButton(
+            onPressed: () => {Navigator.of(context).pop()},
+            child: Text(
+              "Cancel",
+              style: TextStyle(color: Colors.black, fontSize: Sizes.size16),
+            ),
+          ),
+          automaticallyImplyLeading: false,
+          leadingWidth: Sizes.size96,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          title: FaIcon(FontAwesomeIcons.twitter, color: Color(0xFF1DA1F2)),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsetsGeometry.symmetric(horizontal: Sizes.size40),
+            child: Column(
+              children: [
+                Gaps.v24,
+                Text(
+                  "Create your account",
+                  style: TextStyle(
+                    fontSize: Sizes.size24,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.black87,
+                  ),
+                ),
+                Gaps.v28,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        style: TextStyle(color: Colors.lightBlue),
+                        decoration: InputDecoration(
+                          suffixIcon: nameIcon,
+                          hintText: "Name",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: Sizes.size16,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                        ),
+                        validator: (value) => isNameValid(value),
+                        onSaved: (newValue) => {
+                          if (newValue != null) {_formData["name"] = newValue},
+                        },
+                      ),
+                      Gaps.v10,
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(color: Colors.lightBlue),
+                        decoration: InputDecoration(
+                          suffix: emailIcon,
+                          hintText: "Phone number or email address",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: Sizes.size16,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                        ),
+                        validator: (value) => isEmailOrPhoneNumberValid(value),
+                        onSaved: (newValue) => {
+                          if (newValue != null) _formData["email"] = newValue,
+                        },
+                      ),
+                      Gaps.v10,
+                      TextFormField(
+                        style: TextStyle(color: Colors.lightBlue),
+                        onTap: () => _showDatePicker(context),
+                        controller: _dateContoller,
+                        decoration: InputDecoration(
+                          suffix: birthdayIcon,
+                          hintText: "Date of birth",
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontSize: Sizes.size16,
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade400),
+                          ),
+                        ),
+                        validator: (value) => isBirthdayValid(value),
+                        onSaved: (newValue) => {
+                          if (newValue != null)
+                            _formData["birthday"] = newValue,
+                        },
+                      ),
+                      Gaps.v10,
+                      AnimatedOpacity(
+                        opacity: _showDisclaimer ? 1 : 0,
+                        duration: Duration(milliseconds: 300),
+                        child: Text(
+                          "This will not be shown publicly. Confirm your own age, even if"
+                          " this account is for a business, a pet, or something else.",
+                          style: TextStyle(
+                            fontSize: Sizes.size14,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_isCustomizeEnabled) returnWidget!,
+              ],
+            ),
           ),
         ),
-        automaticallyImplyLeading: false,
-        leadingWidth: Sizes.size96,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
-        elevation: 0,
-        title: FaIcon(FontAwesomeIcons.twitter, color: Color(0xFF1DA1F2)),
+        bottomNavigationBar: !_isCustomizeEnabled ? bottomAppBar : null,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsetsGeometry.symmetric(horizontal: Sizes.size40),
-          child: Column(
-            children: [
-              Gaps.v24,
-              Text(
-                "Create your account",
-                style: TextStyle(
-                  fontSize: Sizes.size24,
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black87,
-                ),
-              ),
-              Gaps.v28,
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      style: TextStyle(color: Colors.lightBlue),
-                      decoration: InputDecoration(
-                        suffixIcon: nameIcon,
-                        hintText: "Name",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: Sizes.size16,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                      ),
-                      validator: (value) => isNameValid(value),
-                      onSaved: (newValue) => {
-                        if (newValue != null) {_formData["name"] = newValue},
-                      },
-                    ),
-                    Gaps.v10,
-                    TextFormField(
-                      style: TextStyle(color: Colors.lightBlue),
-                      decoration: InputDecoration(
-                        suffix: emailIcon,
-                        hintText: "Phone number or email address",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: Sizes.size16,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                      ),
-                      validator: (value) => isEmailOrPhoneNumberValid(value),
-                      onSaved: (newValue) => {
-                        if (newValue != null) _formData["email"] = newValue,
-                      },
-                    ),
-                    Gaps.v10,
-                    TextFormField(
-                      style: TextStyle(color: Colors.lightBlue),
-                      onTap: () => _showDatePicker(context),
-                      controller: _dateContoller,
-                      decoration: InputDecoration(
-                        suffix: birthdayIcon,
-                        hintText: "Date of birth",
-                        hintStyle: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: Sizes.size16,
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade400),
-                        ),
-                      ),
-                      validator: (value) => isBirthdayValid(value),
-                      onSaved: (newValue) => {
-                        if (newValue != null) _formData["birthday"] = newValue,
-                      },
-                    ),
-                    Gaps.v10,
-                    AnimatedOpacity(
-                      opacity: _showDisclaimer ? 1 : 0,
-                      duration: Duration(milliseconds: 300),
-                      child: Text(
-                        "This will not be shown publicly. Confirm your own age, even if"
-                        " this account is for a business, a pet, or something else.",
-                        style: TextStyle(
-                          fontSize: Sizes.size14,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              if (_isCustomizeEnabled) returnWidget!,
-            ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: !_isCustomizeEnabled ? bottomAppBar : null,
     );
   }
 }
