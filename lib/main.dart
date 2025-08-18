@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants/sizes.dart';
-// TODO to reverse later
-// import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
-import 'package:twitter_clone/features/confirmation/widgets/confirmation_screen.dart';
+// TODO: To clean up import lines later after finished
+import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
+import 'package:twitter_clone/features/customization/widgets/interest_screen_part1.dart';
 
 void main() {
   // runApp(const TwitterApp());
@@ -40,7 +40,7 @@ class TwitterApp extends StatelessWidget {
       ),
       // TODO: for dev only. To replace.
       // home: InitialScreen(),
-      home: ConfirmationScreen(formData: formData),
+      home: InterestScreenPart1(),
     );
   }
 }
