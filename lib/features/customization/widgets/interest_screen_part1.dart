@@ -1,61 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
-import 'package:twitter_clone/features/authentication/widgets/auth_button.dart';
-import 'package:twitter_clone/features/authentication/widgets/form_button.dart';
 import 'package:twitter_clone/features/authentication/widgets/twitter_appbar.dart';
 import 'package:twitter_clone/features/customization/widgets/interest_button_square.dart';
 import 'package:twitter_clone/features/customization/widgets/interest_screen_part2.dart';
-
-const interests = [
-  "Daily Life",
-  "Comedy",
-  "Entertainment",
-  "Animals",
-  "Food",
-  "Beauty & Style",
-  "Drama",
-  "Learning",
-  "Talent",
-  "Sports",
-  "Auto",
-  "Family",
-  "Fitness & Health",
-  "DIY & Life Hacks",
-  "Arts & Crafts",
-  "Dance",
-  "Outdoors",
-  "Oddly Satisfying",
-  "Home & Garden",
-  // "Daily Life",
-  // "Comedy",
-  // "Entertainment",
-  // "Animals",
-  // "Food",
-  // "Beauty & Style",
-  // "Drama",
-  // "Learning",
-  // "Talent",
-  // "Sports",
-  // "Auto",
-  // "Family",
-  // "Fitness & Health",
-  // "DIY & Life Hacks",
-  // "Arts & Crafts",
-  // "Dance",
-  // "Outdoors",
-  // "Oddly Satisfying",
-  // "Home & Garden",
-];
+import 'package:twitter_clone/features/customization/widgets/interst_list.dart';
 
 class InterestScreenPart1 extends StatefulWidget {
   const InterestScreenPart1({super.key});
 
   @override
-  State<InterestScreenPart1> createState() => _InterestScreenState();
+  State<InterestScreenPart1> createState() => _InterestScreenPart1State();
 }
 
-class _InterestScreenState extends State<InterestScreenPart1> {
+class _InterestScreenPart1State extends State<InterestScreenPart1> {
   final int _minNumInterest = 3;
   final List<String> _selectedInterests = [];
   bool _isMinInterestSelected = false;
@@ -128,7 +86,7 @@ class _InterestScreenState extends State<InterestScreenPart1> {
                   mainAxisSpacing: Sizes.size16,
                   childAspectRatio: 2.0,
                   children: [
-                    for (var interest in interests)
+                    for (var interest in interestList)
                       InterestButtonSquare(
                         interest: interest,
                         onPressed: _onPressInterest,
