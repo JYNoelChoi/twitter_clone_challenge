@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:twitter_clone/constants/sizes.dart';
-// TODO: To clean up import lines later after finished
 import 'package:twitter_clone/features/authentication/widgets/initial_screen.dart';
-import 'package:twitter_clone/features/customization/widgets/interest_screen_part1.dart';
 
 void main() {
   // runApp(const TwitterApp());
-  // TODO: for dev only
-  runApp(TwitterApp());
+  runApp(const TwitterApp());
 }
 
 class TwitterApp extends StatelessWidget {
-  TwitterApp({super.key});
-
-  // TODO: for dev only
-  final Map<String, String> formData = {
-    "email": "adsfdsa@dsafds.com",
-    "password": "asdfdasfadsfdsaf",
-    "birdthday": "2003-01-01",
-  };
+  const TwitterApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -38,9 +28,7 @@ class TwitterApp extends StatelessWidget {
           ),
         ),
       ),
-      // TODO: for dev only. To replace.
-      // home: InitialScreen(),
-      home: InterestScreenPart1(),
+      home: InitialScreen(),
     );
   }
 }
