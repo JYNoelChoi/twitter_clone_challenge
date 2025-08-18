@@ -4,7 +4,7 @@ import 'package:twitter_clone/constants/gaps.dart';
 import 'package:twitter_clone/constants/sizes.dart';
 import 'package:twitter_clone/features/authentication/widgets/auth_button.dart';
 import 'package:twitter_clone/features/authentication/widgets/twitter_appbar.dart';
-import 'package:twitter_clone/features/customization/widgets/interest_screen.dart';
+import 'package:twitter_clone/features/customization/widgets/interest_screen_part1.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
@@ -46,7 +46,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     if (!_isPasswordValid()) return;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const InterestScreen()),
+      MaterialPageRoute(builder: (context) => const InterestScreenPart1()),
     );
   }
 

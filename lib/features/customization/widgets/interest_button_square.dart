@@ -5,7 +5,7 @@ import 'package:twitter_clone/constants/sizes.dart';
 
 class InterestButtonSquare extends StatefulWidget {
   final String interest;
-  final void Function(String) onPressed;
+  final void Function(String, bool) onPressed;
 
   const InterestButtonSquare({
     super.key,
@@ -21,7 +21,7 @@ class _InterestButtonState extends State<InterestButtonSquare> {
   bool _isSelected = false;
 
   void _onTap() {
-    widget.onPressed(widget.interest);
+    widget.onPressed(widget.interest, !_isSelected);
     setState(() {
       _isSelected = !_isSelected;
     });
