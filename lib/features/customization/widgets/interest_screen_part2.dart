@@ -35,12 +35,12 @@ class _InterestScreenPart2State extends State<InterestScreenPart2> {
   }
 
   void _onTapNext() {
-    if (_isMinInterestSelected) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const InterestScreenPart2()),
-      );
-    }
+    // if (_isMinInterestSelected) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(builder: (context) => const InterestScreenPart2()),
+    //   );
+    // }
   }
 
   @override
